@@ -28,6 +28,10 @@ app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/chat", chatRouter);
 
+
+app.get('/',async(req,res)=>{
+  res.send('welcome to backend');
+})
 // Protected route using the verifyToken middleware
 app.get("/protected", verifyToken, (req, res) => {
   return res.json({
