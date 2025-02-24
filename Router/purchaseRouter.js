@@ -2,6 +2,8 @@ import express from "express";
 import {
   createPurchase,
   getUserOrders,
+  GetFeedback,
+  createFeedback
 } from "../Controller/purchaseController.js";
 import multer from "multer";
 import path from "path";
@@ -25,5 +27,6 @@ const upload = multer({
 
 router.post("/order", upload.single("image"), createPurchase);
 router.get("/getUserOrders", getUserOrders);
-
+router.post("/feedback", createFeedback)
+router.get("/GetFeedback", GetFeedback)
 export default router;

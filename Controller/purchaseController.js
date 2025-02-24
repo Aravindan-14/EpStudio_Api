@@ -142,3 +142,41 @@ export const getUserOrders = async (req, res) => {
     });
   }
 };
+
+
+export const createFeedback = async (req, res) => {
+  try {
+    const { rating, feedback, CustomerId, CustomerName } = req.body;
+
+    if (!rating || !feedback) {
+      return res.status(400).json({ code: 400, message: "Rating and feedback are required" });
+    }
+
+    const sql = "INSERT INTO feedback (`rating`, `feedback`, `CustomerId`, `CustomerName`) VALUES (?, ?, ?, ?)";
+
+    const [result] = await db.execute(sql, [rating, feedback, CustomerId, CustomerName]);
+
+    return res.status(200).json({ code: 200, message: "Feedback submitted successfully", feedbackId: result.insertId });
+
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    return res.status(500).json({ code: 500, message: "Internal server error", error });
+  }
+};
+
+export const GetFeedback = async (req, res) => {
+  try {
+    // Use db.execute() to get only the result set (avoids metadata)
+    const [rows] = await db.execute("SELECT * FROM feedback");
+
+    if (rows.length > 0) {
+      res.status(200).json({ code: 200, message: "Feedback Fetched Successfully", data: rows });
+    } else {
+      res.status(404).json({ code: 404, message: "No feedback found" });
+    }
+  } catch (error) {
+    console.error("Error fetching feedback:", error);
+    res.status(500).json({ code: 500, message: "Internal Server Error" });
+  }
+};
+
